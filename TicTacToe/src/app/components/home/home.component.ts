@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {User} from '../../models/user.model';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-home',
@@ -8,17 +10,17 @@ import {Router} from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  username = '';
+  user: any;
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    const user = localStorage.getItem('username');
-    if (user === null) {
+    const value = localStorage.getItem('user')
+    if (!value) {
       this.router.navigate(['/register']);
     }
     else {
-      this.username = user.toString();
+      this.user = JSON.parse(value);
     }
   }
 
