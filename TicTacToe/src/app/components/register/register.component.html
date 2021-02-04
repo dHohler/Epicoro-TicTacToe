@@ -1,0 +1,11 @@
+<div class="d-flex flex-column align-items-center">
+  <div class="w-50 p-3" >
+    <label class="label" for="input-name">User name:</label>
+    <input nbInput [(ngModel)]="user.username" id="input-name" name="Username" placeholder="User name" autofocus fullWidth fieldSize="large" maxlength="60">
+  </div>
+
+  <button nbButton class="mt-2 w-25 p-3" status="primary" size="medium" (click)="register()">Register</button >
+
+</div>
+
+
