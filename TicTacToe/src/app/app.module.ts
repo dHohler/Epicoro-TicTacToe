@@ -9,6 +9,9 @@ import { GameComponent } from './components/game/game.component';
 import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FormsModule } from '@angular/forms';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
+import {AngularFireModule} from '@angular/fire';
+import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     NbInputModule,
     NbButtonModule,
-    NbCardModule
+    NbCardModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

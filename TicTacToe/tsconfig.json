@@ -1,5 +1,6 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+  "strictPropertyInitialization": false,
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
@@ -8,7 +9,6 @@
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -23,10 +23,5 @@
       "es2018",
       "dom"
     ]
-  },
-  "angularCompilerOptions": {
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
   }
 }
