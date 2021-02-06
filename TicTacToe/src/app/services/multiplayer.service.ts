@@ -69,6 +69,16 @@ export class MultiplayerService {
     return game;
   }
 
+  updatexPlayer(gameId: string, user: User): any {
+    const gameCollection = this.db.collection('Game');
+    gameCollection.doc(gameId).update({ xPlayer: user});
+  }
+
+  updateoPlayer(gameId: string, user: User): any {
+    const gameCollection = this.db.collection('Game');
+    gameCollection.doc(gameId).update({ oPlayer: user});
+  }
+
   getGamesList(): any {
     const games = this.db.collection<Game>('Game');
     return games.snapshotChanges().pipe(
