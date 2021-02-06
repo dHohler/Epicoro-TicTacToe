@@ -1,9 +1,15 @@
 <nb-card>
   <nb-card-header>
-    Username: {{user.username}}
+    <nb-user [name]="user?.username ? user.username : 'Unknown user'"></nb-user>
   </nb-card-header>
   <nb-card-body>
     <div class="d-flex flex-column align-items-center">
+
+      <ul>
+        <li *ngFor="let game of games | async">
+          {{ game | json }}
+        </li>
+      </ul>
 
     <button nbButton class="mt-2" status="primary" size="medium" (click)="newGame()">New Game</button >
     </div>
