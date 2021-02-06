@@ -16,10 +16,10 @@ export class GameComponent implements OnInit {
   user: User;
   gameId: string;
   game = new Game();
-  gamedto = new GameDTO();
+  gameDto = new GameDTO();
   gameBoard = [0, 1, 2];
   playerRole: string;
-  finished = false;
+  gameFinished = false;
 
   constructor(
     private userService: UserService,
@@ -38,17 +38,32 @@ export class GameComponent implements OnInit {
 
     this.multiPlayerService.fetchGameStatus(this.gameId)
       .subscribe((result: GameDTO) => {
-        this.gamedto = result;
+        this.gameDto = result;
         this.setBoard();
+        this.initializePlayers();
       });
+  }
 
-    this.initializePlayers();
+  opponentUsername(): string {
+    if (!this.gameDto.xPlayer || !this.gameDto.oPlayer)
+    {
+      return '';
+    }
+    else {
+      return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.oPlayer.username;
+    }
+  }
+  opponentRole(): string {
+    if (!this.gameDto.xPlayer || !this.gameDto.oPlayer) {
+      return '';
+    }
+    else {
+      return (this.playerRole === 'X') ? ': O' : ': X';
+    }
   }
 
   initializePlayers(): void {
-    if (this.gamedto.xPlayer  == null && this.gamedto.oPlayer == null) {
-      console.log('nope')
-
+    if (!this.gameDto.xPlayer && !this.gameDto.oPlayer) {
       if (Math.random() < 0.5)
       {
         this.setXPlayer();
@@ -57,31 +72,35 @@ export class GameComponent implements OnInit {
         this.setOPlayer();
       }
     }
+    else if (this.gameDto.xPlayer && this.gameDto.oPlayer && !this.playerRole)
+    {
+      if (this.gameDto.xPlayer.id === this.user.id) {
+        this.playerRole = 'X';
+      }
+      else if (this.gameDto.oPlayer.id === this.user.id) {
+        this.playerRole = 'O';
+      }
+    }
     else {
-      console.log('tu')
-      if (this.gamedto.xPlayer == null) {
-        console.log('tuuu')
-
+      if (!this.gameDto.xPlayer && (this.gameDto.oPlayer.id !== this.user.id)) {
         this.setXPlayer();
       }
-      else {
-        console.log('tuuuuuuuuuuuuuuu')
-
+      else if (!this.gameDto.oPlayer && (this.gameDto.xPlayer.id !== this.user.id)) {
         this.setOPlayer();
       }
     }
   }
 
   setXPlayer(): void {
-    this.gamedto.xPlayer = this.user;
+    this.gameDto.xPlayer = this.user;
     this.playerRole = 'X';
-    this.multiPlayerService.updatexPlayer(this.gameId, this.gamedto.xPlayer);
+    this.multiPlayerService.updatexPlayer(this.gameId, this.gameDto.xPlayer);
   }
 
   setOPlayer(): void {
-    this.gamedto.oPlayer = this.user;
+    this.gameDto.oPlayer = this.user;
     this.playerRole = 'O';
-    this.multiPlayerService.updateoPlayer(this.gameId, this.gamedto.oPlayer);
+    this.multiPlayerService.updateoPlayer(this.gameId, this.gameDto.oPlayer);
   }
 
   back(): void {
@@ -89,22 +108,22 @@ export class GameComponent implements OnInit {
   }
 
   setBoard(): any {
-    this.game.cellValue[0] = this.gamedto.row0;
-    this.game.cellValue[1] = this.gamedto.row1;
-    this.game.cellValue[2] = this.gamedto.row2;
-    this.game.currentPlayer = this.gamedto.currentPlayer;
+    this.game.cellValue[0] = this.gameDto.row0;
+    this.game.cellValue[1] = this.gameDto.row1;
+    this.game.cellValue[2] = this.gameDto.row2;
+    this.game.currentPlayer = this.gameDto.currentPlayer;
 
-    this.finished = this.gameService.GameWon(this.game);
+    this.gameFinished = this.gameService.GameFinished(this.game);
     this.setCurrentPlayer();
 
-    if (this.finished) {
-      this.gamedto.winner = this.game.currentPlayer;
-      this.gamedto.gameFinished = false;
+    if (this.gameFinished) {
+      this.gameDto.winner = this.game.currentPlayer;
+      this.gameDto.gameFinished = false;
     }
   }
 
   SetCellValue(row: number, col: number): any {
-    if (!this.finished) {
+    if (!this.gameFinished) {
       if (this.game.currentPlayer !== this.playerRole) {
         alert('The player ' + this.game.currentPlayer + ' has not yet played.\nPlease wait for your turn.');
       } else if (this.game.cellValue[row][col] === '') {
@@ -119,16 +138,16 @@ export class GameComponent implements OnInit {
     for (let i = 0; i < 3; i++) {
       sum += this.game.cellValue[i].filter(String).length;
     }
-    if (!this.finished) {
+    if (!this.gameFinished) {
       if (sum % 2 === 0) {
         this.game.currentPlayer = 'X';
       } else {
         this.game.currentPlayer = 'O';
       }
       if (sum === 9) {
-        this.gamedto.gameFinished = true;
+        this.gameDto.gameFinished = true;
       } else {
-        this.gamedto.gameFinished = false;
+        this.gameDto.gameFinished = false;
       }
     }
   }

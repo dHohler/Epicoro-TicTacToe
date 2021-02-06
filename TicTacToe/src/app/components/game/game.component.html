@@ -11,19 +11,19 @@
         </div>
       </div>
     </div>
-    <div class="game-status">
-      <div *ngIf="!finished">
-        <h5>You : player {{playerRole}}</h5>
+    <div>
+      <div class="d-flex justify-content-between" *ngIf="!gameFinished">
+        <h5>You : {{playerRole}}</h5>
+        <h5>{{opponentUsername()}}{{opponentRole()}}</h5>
       </div>
-      <span class="spacer"></span>
-      <div>
-        <ng-container *ngIf="finished">
-          <h5>Player {{gamedto.winner}} has won the game</h5>
+      <div class="d-flex justify-content-center" >
+        <ng-container *ngIf="gameFinished">
+          <h5>Player {{gameDto.winner}} has won the game</h5>
         </ng-container>
-        <ng-container *ngIf="!finished && !gamedto.gameFinished">
-          <h5>Turn : Player {{game.currentPlayer}}</h5>
+        <ng-container *ngIf="!gameFinished && !gameDto.gameFinished">
+          <h5>Turn : {{game.currentPlayer}}</h5>
         </ng-container>
-        <ng-container *ngIf="gamedto.gameFinished && !finished">
+        <ng-container *ngIf="gameDto.gameFinished && !gameFinished">
           <h5>Game draw</h5>
         </ng-container>
       </div>
