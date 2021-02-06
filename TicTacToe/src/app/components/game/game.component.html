@@ -1,9 +1,33 @@
 <nb-card>
   <nb-card-header>
-    Username: {{username}}
+    <nb-user [name]="user?.username ? user.username : 'Unknown user'"></nb-user>
   </nb-card-header>
   <nb-card-body>
-    GAME
+    <div class="game-board-container">
+      <div class="game-board">
+        <div *ngFor="let row of gameBoard">
+          <button *ngFor="let col of gameBoard" class="btn btn-light sqaure"
+                  (click)="SetCellValue(row,col)">{{game.cellValue[row][col]}}</button>
+        </div>
+      </div>
+    </div>
+    <div class="game-status">
+      <div *ngIf="!finished">
+        <h5>You : player {{playerRole}}</h5>
+      </div>
+      <span class="spacer"></span>
+      <div>
+        <ng-container *ngIf="finished">
+          <h5>Player {{gamedto.winner}} has won the game</h5>
+        </ng-container>
+        <ng-container *ngIf="!finished && !gamedto.gameFinished">
+          <h5>Turn : Player {{game.currentPlayer}}</h5>
+        </ng-container>
+        <ng-container *ngIf="gamedto.gameFinished && !finished">
+          <h5>Game draw</h5>
+        </ng-container>
+      </div>
+    </div>
   </nb-card-body>
   <nb-card-footer>
     <div class="d-flex flex-column align-items-center">
