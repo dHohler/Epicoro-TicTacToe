@@ -1,0 +1,22 @@
+import {User} from './user.model';
+
+export class Game {
+  cellValue: string[][];
+  currentPlayer: string;
+
+  constructor() {
+    this.cellValue = [];
+  }
+}
+
+export class GameDTO {
+  id: string;
+  row0: string[];
+  row1: string[];
+  row2: string[];
+  xPlayer: User;
+  oPlayer: User;
+  winner: string;
+  currentPlayer: string;
+  gameFinished = false;
+}

@@ -12,6 +12,7 @@ import {UserService} from '../../services/user.service';
 export class RegisterComponent implements OnInit {
 
   user: User  = {id: uuid.v4(), username: ''};
+
   constructor(private router: Router,
               private readonly userService: UserService) { }
 
@@ -20,7 +21,7 @@ export class RegisterComponent implements OnInit {
 
   register(): void {
     this.userService.createUser(this.user);
-    localStorage.setItem('user', JSON.stringify(this.user));
+    localStorage.setItem('User', JSON.stringify(this.user));
     this.router.navigate(['']);
   }
 }
