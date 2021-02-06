@@ -7,13 +7,13 @@ import firebase from 'firebase';
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyCK3zptpsjAMn_YwVRV-7wA8n7JhWz2XV0',
-    authDomain: 'tictactoe-dh.firebaseapp.com',
-    projectId: 'tictactoe-dh',
-    storageBucket: 'tictactoe-dh.appspot.com',
-    messagingSenderId: '277910392819',
-    appId: '1:277910392819:web:c0314c3addbe03f2208c86',
-    measurementId: 'G-65ZT0ZGBVB'
+    apiKey: "AIzaSyAuOvV3NfAKvDXIcnZvX2idfNR7is0J_0M",
+    authDomain: "tictactoe-epicoro.firebaseapp.com",
+    projectId: "tictactoe-epicoro",
+    storageBucket: "tictactoe-epicoro.appspot.com",
+    messagingSenderId: "579763773611",
+    appId: "1:579763773611:web:765dc2bbd855f1d57957ee",
+    measurementId: "G-K37RWGJK0J"
   }
 };
 

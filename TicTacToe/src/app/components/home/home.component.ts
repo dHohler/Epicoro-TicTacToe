@@ -29,5 +29,6 @@ export class HomeComponent implements OnInit {
   }
 
   newGame(): void {
-    this.router.navigate(['/game']);  }
+    this.multiPlayerService.initializeGame();
+  }
 }
