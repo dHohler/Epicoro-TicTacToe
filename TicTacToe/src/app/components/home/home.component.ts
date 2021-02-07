@@ -3,9 +3,10 @@ import {Router} from '@angular/router';
 import {User} from '../../models/user.model';
 import {UserService} from '../../services/user.service';
 import {MultiplayerService} from '../../services/multiplayer.service';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {Game} from '../../models/game.model';
+import {GameDTO} from '../../models/game.model';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {NbIconLibraries} from '@nebular/theme';
 
 @Component({
   selector: 'app-home',
@@ -15,25 +16,59 @@ import {Observable} from 'rxjs';
 export class HomeComponent implements OnInit {
 
   user: User;
-  games: Observable<Game[]>;
+  allGames: Observable<GameDTO[]>;
+  emptyGames: Observable<GameDTO[]>;
+  activeGames: Observable<GameDTO[]>;
+  finishedGames: Observable<GameDTO[]>;
 
   constructor(
     private router: Router,
     private userService: UserService,
     private multiPlayerService: MultiplayerService,
-    private db: AngularFirestore) {}
+    private iconLibraries: NbIconLibraries) {
+    this.iconLibraries.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    this.iconLibraries.registerFontPack('far', { packClass: 'far', iconClassPrefix: 'fa' });
+  }
 
   ngOnInit(): void {
     this.user = this.userService.checkLocalUser();
-    this.games = this.multiPlayerService.getGamesList();
+    this.allGames = this.multiPlayerService.getGamesList();
 
-    const emptyGames = this.multiPlayerService.getEmptyGames().subscribe(r => {
-      r.forEach(doc => console.log(doc.data()));
-    });
-    console.log((emptyGames));
+    this.emptyGames = this.allGames.pipe(
+      map(games =>
+        games.filter( game => game.gameStatus === 0)
+      )
+    );
+
+    this.activeGames = this.allGames.pipe(
+      map(games =>
+        games.filter( game => game.gameStatus === 1 && (game.xPlayer.id === this.user.id || game.oPlayer.id === this.user.id))
+      )
+    );
+
+    this.finishedGames = this.allGames.pipe(
+      map(games =>
+        games.filter(game => game.gameStatus === 2 || game.gameStatus === 3
+          && (game.xPlayer.id === this.user.id || game.oPlayer.id === this.user.id))
+      )
+    );
   }
 
   newGame(): void {
     this.multiPlayerService.initializeGame();
+  }
+
+  waitingPlayer(game: GameDTO): string {
+    if (game.oPlayer)
+    {
+      return game.oPlayer.username;
+    }
+    else {
+      return game.xPlayer.username;
+    }
+  }
+
+  openGame(id: string): void {
+    this.router.navigate([`/game/${id}`]);
   }
 }

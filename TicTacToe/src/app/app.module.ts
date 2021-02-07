@@ -3,7 +3,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {NbThemeModule, NbLayoutModule, NbInputModule, NbButtonModule, NbCardModule, NbUserModule} from '@nebular/theme';
+import {
+  NbThemeModule,
+  NbLayoutModule,
+  NbInputModule,
+  NbButtonModule,
+  NbCardModule,
+  NbUserModule,
+  NbAccordionModule, NbIconModule, NbBadgeModule
+} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { GameComponent } from './components/game/game.component';
 import { HomeComponent } from './components/home/home.component';
@@ -33,7 +41,10 @@ import {environment} from '../environments/environment';
     NbCardModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    NbUserModule
+    NbUserModule,
+    NbAccordionModule,
+    NbIconModule,
+    NbBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

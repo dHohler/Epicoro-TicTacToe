@@ -130,7 +130,7 @@ export class GameComponent implements OnInit {
     {
       this.gameFinished = true;
       this.gameDto.gameFinished = true;
-      this.gameDto.winner = this.game.currentPlayer;
+      this.gameDto.winner = this.game.currentPlayer === 'X' ? this.gameDto.oPlayer : this.gameDto.xPlayer;
       this.gameDto.gameStatus = 2;
       this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
     }
@@ -149,6 +149,7 @@ export class GameComponent implements OnInit {
         alert('The player ' + this.game.currentPlayer + ' has not yet played.\nPlease wait for your turn.');
       } else if (this.game.cellValue[row][col] === '') {
         this.game.cellValue[row][col] = this.game.currentPlayer;
+        this.setCurrentPlayer();
         this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
       }
     }

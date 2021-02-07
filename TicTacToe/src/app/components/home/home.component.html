@@ -3,15 +3,102 @@
     <nb-user [name]="user?.username ? user.username : 'Unknown user'"></nb-user>
   </nb-card-header>
   <nb-card-body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <nb-accordion>
+            <nb-accordion-item class="gameItem">
+              <nb-accordion-item-header>Empty games</nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="overflow-auto accordionItem">
+                  <div *ngFor="let game of emptyGames | async">
+                    <div class="d-flex justify-content-between pointer" (click)="openGame(game.id)">
+                      <div class="d-flex align-items-center justify-content-center">
+                        <nb-icon icon="times-circle" pack="far"></nb-icon>
+                        <span class="ml-2">{{waitingPlayer(game)}}</span>
+                      </div>
+                      <div>
+                        <button nbButton class="mr-3" status="primary" size="small">Join Game</button >
+                      </div>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+        </div>
+        <div class="col-sm">
+          <nb-accordion>
+            <nb-accordion-item class="gameItem">
+              <nb-accordion-item-header>Active games</nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="overflow-auto accordionItem">
+                  <div *ngFor="let game of activeGames | async">
+                    <div class="d-flex justify-content-between pointer" (click)="openGame(game.id)">
+                      <div>
+                        <div class="mt-2 mb-2">
+                          <nb-icon icon="times" pack="fas"></nb-icon>
+                          <span class="ml-3">{{game.xPlayer.username}}</span>
+                        </div>
+                        <div class="mt-2 mb-2">
+                          <nb-icon icon="circle" pack="far"></nb-icon>
+                          <span class="ml-3">{{game.oPlayer.username}}</span>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-center mr-1">
+                        <span class="mr-2">Next move: <span class="font-weight-bolder">{{game.currentPlayer}}</span></span>
+                      </div>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+        </div>
+        <div class="col-sm">
+          <nb-accordion>
+            <nb-accordion-item class="gameItem">
+              <nb-accordion-item-header>Finished games</nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="overflow-auto accordionItem">
+                  <div *ngFor="let game of finishedGames | async">
+                    <div class="d-flex justify-content-between pointer" (click)="openGame(game.id)">
+                      <div>
+                        <div class="mt-2 mb-2">
+                          <nb-icon icon="times" pack="fas"></nb-icon>
+                          <span class="ml-3">{{game.xPlayer.username}}</span>
+                        </div>
+                        <div class="mt-2 mb-2">
+                          <nb-icon icon="circle" pack="far"></nb-icon>
+                          <span class="ml-3">{{game.oPlayer.username}}</span>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-center">
+                        <span *ngIf="game.winner.id === user.id" class="badge badge-success">
+                          You won!
+                          <nb-icon icon="trophy" pack="fas"></nb-icon>
+                        </span>
+                        <span *ngIf="game.winner.id !== user.id" class="badge badge-danger">
+                          You lost!
+                          <nb-icon icon="frown" pack="far"></nb-icon>
+                        </span>
+                      </div>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+        </div>
+      </div>
+    </div>
+
     <div class="d-flex flex-column align-items-center">
-
-      <ul>
-        <li *ngFor="let game of games | async">
-          {{ game | json }}
-        </li>
-      </ul>
-
-    <button nbButton class="mt-2" status="primary" size="medium" (click)="newGame()">New Game</button >
+    <button nbButton class="mt-4" status="primary" size="medium" (click)="newGame()">New Game</button >
     </div>
   </nb-card-body>
 </nb-card>
