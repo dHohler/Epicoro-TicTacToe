@@ -47,10 +47,10 @@ export class GameComponent implements OnInit {
   opponentUsername(): string {
     if (!this.gameDto.xPlayer || !this.gameDto.oPlayer)
     {
-      return '';
+      return 'Waiting for other player...';
     }
     else {
-      return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.oPlayer.username;
+      return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.xPlayer.username;
     }
   }
   opponentRole(): string {
@@ -72,21 +72,21 @@ export class GameComponent implements OnInit {
         this.setOPlayer();
       }
     }
-    else if (this.gameDto.xPlayer && this.gameDto.oPlayer && !this.playerRole)
-    {
-      if (this.gameDto.xPlayer.id === this.user.id) {
-        this.playerRole = 'X';
-      }
-      else if (this.gameDto.oPlayer.id === this.user.id) {
-        this.playerRole = 'O';
-      }
-    }
     else {
       if (!this.gameDto.xPlayer && (this.gameDto.oPlayer.id !== this.user.id)) {
         this.setXPlayer();
       }
       else if (!this.gameDto.oPlayer && (this.gameDto.xPlayer.id !== this.user.id)) {
         this.setOPlayer();
+      }
+    }
+    if (!this.playerRole)
+    {
+      if (this.gameDto.xPlayer.id === this.user.id) {
+        this.playerRole = 'X';
+      }
+      else if (this.gameDto.oPlayer.id === this.user.id) {
+        this.playerRole = 'O';
       }
     }
   }
@@ -115,7 +115,6 @@ export class GameComponent implements OnInit {
 
     this.gameFinished = this.gameService.GameFinished(this.game);
     this.setCurrentPlayer();
-
     if (this.gameFinished) {
       this.gameDto.winner = this.game.currentPlayer;
       this.gameDto.gameFinished = false;

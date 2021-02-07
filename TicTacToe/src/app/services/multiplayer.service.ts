@@ -6,6 +6,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {map} from 'rxjs/operators';
 import {User} from '../models/user.model';
 import {Router} from '@angular/router';
+import firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,8 @@ export class MultiplayerService {
     initialGameDTO.row1 = initialGame.cellValue[1];
     initialGameDTO.row2 = initialGame.cellValue[2];
     initialGameDTO.currentPlayer = 'X';
+    initialGameDTO.oPlayer = null;
+    initialGameDTO.xPlayer = null;
 
     const gameData = JSON.parse(JSON.stringify(initialGameDTO));
 
@@ -55,6 +58,10 @@ export class MultiplayerService {
 
   fetchGameStatus(gameId: string): Observable<GameDTO> {
     return this.db.doc<GameDTO>('Game/' + gameId).valueChanges();
+  }
+
+  getEmptyGames(): any {
+    return this.db.collection('Game', (ref) => ref.where('oPlayer', '==', null).limit(10)).get();
   }
 
   setArray(): Game {
