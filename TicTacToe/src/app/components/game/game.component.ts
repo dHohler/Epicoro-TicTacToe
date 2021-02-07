@@ -45,22 +45,11 @@ export class GameComponent implements OnInit {
   }
 
   opponentUsername(): string {
-    if (!this.gameDto.xPlayer || !this.gameDto.oPlayer)
-    {
-      return 'Waiting for other player...';
-    }
-    else {
-      return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.xPlayer.username;
-    }
+    return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.xPlayer.username;
   }
 
   opponentRole(): string {
-    if (!this.gameDto.xPlayer || !this.gameDto.oPlayer) {
-      return '';
-    }
-    else {
       return (this.playerRole === 'X') ? ': O' : ': X';
-    }
   }
 
   initializePlayers(): void {

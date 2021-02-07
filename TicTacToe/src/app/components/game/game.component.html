@@ -13,15 +13,20 @@
     </div>
     <div>
       <div class="d-flex justify-content-between">
-        <h5>You : {{playerRole}}</h5>
-        <h5>{{opponentUsername()}}{{opponentRole()}}</h5>
+        <h5 class="ml-5">You : {{playerRole}}</h5>
+        <h5 *ngIf="gameDto.gameStatus === 1" class="mr-5">{{opponentUsername()}}{{opponentRole()}}</h5>
+        <h5 *ngIf="gameDto.gameStatus === 0" class="mr-5">Waiting for other player...</h5>
       </div>
       <div class="d-flex justify-content-center" >
         <ng-container *ngIf="gameDto.gameStatus === 2">
           <h5>{{gameDto.winner.id === user.id ? 'You' : gameDto.winner.username}} won the game!</h5>
         </ng-container>
         <ng-container *ngIf="gameDto.gameStatus === 1">
-          <h5>Turn : {{game.currentPlayer}}</h5>
+          <h4>
+            <span *ngIf="(gameDto.xPlayer.id === user.id && gameDto.currentPlayer === 'X') || (gameDto.oPlayer.id === user.id && gameDto.currentPlayer === 'O')" class="badge badge-success">Your turn!</span>
+            <span *ngIf="(gameDto.xPlayer.id !== user.id && gameDto.currentPlayer === 'X')" class="badge badge-secondary">{{gameDto.xPlayer.username}}'s turn!</span>
+            <span *ngIf="(gameDto.oPlayer.id !== user.id && gameDto.currentPlayer === 'O')" class="badge badge-secondary">{{gameDto.oPlayer.username}}'s turn!</span>
+          </h4>
         </ng-container>
         <ng-container *ngIf="gameDto.gameStatus === 3">
           <h5>Game draw</h5>
