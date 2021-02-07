@@ -9,7 +9,7 @@ export class GameService {
 
   constructor() { }
 
-  GameFinished(game: Game): boolean {
+  GameWon(game: Game): boolean {
 
     let win = false;
 

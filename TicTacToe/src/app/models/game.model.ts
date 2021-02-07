@@ -19,4 +19,12 @@ export class GameDTO {
   winner: string;
   currentPlayer: string;
   gameFinished = false;
+  gameStatus: GameStatus;
+}
+
+export enum GameStatus {
+  WaitingForPLayer,
+  Active,
+  Won,
+  Draw
 }

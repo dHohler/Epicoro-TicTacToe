@@ -6,7 +6,6 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {map} from 'rxjs/operators';
 import {User} from '../models/user.model';
 import {Router} from '@angular/router';
-import firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -45,14 +44,13 @@ export class MultiplayerService {
     }
   }
 
-  SaveGameStatus(gameId: string, game: Game): any {
-    const gameStatus = new GameDTO();
-    gameStatus.row0 = game.cellValue[0];
-    gameStatus.row1 = game.cellValue[1];
-    gameStatus.row2 = game.cellValue[2];
-    gameStatus.currentPlayer = game.currentPlayer;
+  SaveGameStatus(gameId: string, game: Game, gameDto: GameDTO): any {
+    gameDto.row0 = game.cellValue[0];
+    gameDto.row1 = game.cellValue[1];
+    gameDto.row2 = game.cellValue[2];
+    gameDto.currentPlayer = game.currentPlayer;
 
-    const gameData = JSON.parse(JSON.stringify(gameStatus));
+    const gameData = JSON.parse(JSON.stringify(gameDto));
     return this.db.doc('Game/' + gameId).update(gameData);
   }
 
@@ -87,11 +85,11 @@ export class MultiplayerService {
   }
 
   getGamesList(): any {
-    const games = this.db.collection<Game>('Game');
+    const games = this.db.collection<GameDTO>('Game');
     return games.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          const data = a.payload.doc.data() as Game;
+          const data = a.payload.doc.data() as GameDTO;
           const id = a.payload.doc.id;
           return { id, ...data };
         });

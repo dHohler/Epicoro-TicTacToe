@@ -53,6 +53,7 @@ export class GameComponent implements OnInit {
       return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.xPlayer.username;
     }
   }
+
   opponentRole(): string {
     if (!this.gameDto.xPlayer || !this.gameDto.oPlayer) {
       return '';
@@ -63,6 +64,7 @@ export class GameComponent implements OnInit {
   }
 
   initializePlayers(): void {
+    let update = false;
     if (!this.gameDto.xPlayer && !this.gameDto.oPlayer) {
       if (Math.random() < 0.5)
       {
@@ -71,14 +73,18 @@ export class GameComponent implements OnInit {
       else {
         this.setOPlayer();
       }
+      this.gameDto.gameStatus = 0;
+      update = true;
     }
-    else {
-      if (!this.gameDto.xPlayer && (this.gameDto.oPlayer.id !== this.user.id)) {
+    else if (!this.gameDto.xPlayer && (this.gameDto.oPlayer.id !== this.user.id)) {
         this.setXPlayer();
-      }
-      else if (!this.gameDto.oPlayer && (this.gameDto.xPlayer.id !== this.user.id)) {
-        this.setOPlayer();
-      }
+        update = true;
+        this.gameDto.gameStatus = 1;
+    }
+    else if (!this.gameDto.oPlayer && (this.gameDto.xPlayer.id !== this.user.id)) {
+      this.setOPlayer();
+      update = true;
+      this.gameDto.gameStatus = 1;
     }
     if (!this.playerRole)
     {
@@ -89,50 +95,66 @@ export class GameComponent implements OnInit {
         this.playerRole = 'O';
       }
     }
+    if (update)
+    {
+      this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
+    }
   }
 
   setXPlayer(): void {
     this.gameDto.xPlayer = this.user;
     this.playerRole = 'X';
-    this.multiPlayerService.updatexPlayer(this.gameId, this.gameDto.xPlayer);
   }
 
   setOPlayer(): void {
     this.gameDto.oPlayer = this.user;
     this.playerRole = 'O';
-    this.multiPlayerService.updateoPlayer(this.gameId, this.gameDto.oPlayer);
   }
 
   back(): void {
     this.router.navigate(['']);
   }
 
-  setBoard(): any {
+  setBoard(): void {
     this.game.cellValue[0] = this.gameDto.row0;
     this.game.cellValue[1] = this.gameDto.row1;
     this.game.cellValue[2] = this.gameDto.row2;
     this.game.currentPlayer = this.gameDto.currentPlayer;
 
-    this.gameFinished = this.gameService.GameFinished(this.game);
+    this.CheckGameStatus();
     this.setCurrentPlayer();
-    if (this.gameFinished) {
+  }
+
+  CheckGameStatus(): void {
+    if (this.gameService.GameWon(this.game) && !this.gameFinished)
+    {
+      this.gameFinished = true;
+      this.gameDto.gameFinished = true;
       this.gameDto.winner = this.game.currentPlayer;
-      this.gameDto.gameFinished = false;
+      this.gameDto.gameStatus = 2;
+      this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
+    }
+    if (this.isDraw()  && !this.gameFinished)
+    {
+      this.gameFinished = true;
+      this.gameDto.gameFinished = true;
+      this.gameDto.gameStatus = 3;
+      this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
     }
   }
 
-  SetCellValue(row: number, col: number): any {
+  SetCellValue(row: number, col: number): void {
     if (!this.gameFinished) {
       if (this.game.currentPlayer !== this.playerRole) {
         alert('The player ' + this.game.currentPlayer + ' has not yet played.\nPlease wait for your turn.');
       } else if (this.game.cellValue[row][col] === '') {
         this.game.cellValue[row][col] = this.game.currentPlayer;
-        this.multiPlayerService.SaveGameStatus(this.gameId, this.game);
+        this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
       }
     }
   }
 
-  setCurrentPlayer(): any {
+  setCurrentPlayer(): void {
     let sum = 0;
     for (let i = 0; i < 3; i++) {
       sum += this.game.cellValue[i].filter(String).length;
@@ -143,11 +165,19 @@ export class GameComponent implements OnInit {
       } else {
         this.game.currentPlayer = 'O';
       }
-      if (sum === 9) {
-        this.gameDto.gameFinished = true;
-      } else {
-        this.gameDto.gameFinished = false;
-      }
+    }
+  }
+
+  isDraw(): boolean {
+    let sum = 0;
+    for (let i = 0; i < 3; i++) {
+      sum += this.game.cellValue[i].filter(String).length;
+    }
+
+    if (sum === 9) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
