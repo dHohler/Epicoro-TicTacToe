@@ -26,6 +26,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.userService.checkLocalUser();
     this.games = this.multiPlayerService.getGamesList();
+
+    const emptyGames = this.multiPlayerService.getEmptyGames().subscribe(r => {
+      r.forEach(doc => console.log(doc.data()));
+    });
+    console.log((emptyGames));
   }
 
   newGame(): void {

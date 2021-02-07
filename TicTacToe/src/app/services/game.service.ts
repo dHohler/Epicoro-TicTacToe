@@ -9,7 +9,7 @@ export class GameService {
 
   constructor() { }
 
-  GameFinished(game: Game): boolean {
+  GameWon(game: Game): boolean {
 
     let win = false;
 
@@ -27,7 +27,6 @@ export class GameService {
     // Check for winning on diagonal
     if ((game.cellValue[0][0] === game.cellValue[1][1]) && (game.cellValue[1][1] === game.cellValue[2][2]) && game.cellValue[0][0] !== '') {
       win = true;
-
     }
     else if ((game.cellValue[0][2] === game.cellValue[1][1]) && (game.cellValue[1][1] === game.cellValue[2][0]) && game.cellValue[0][2] !== '') {
       win = true;

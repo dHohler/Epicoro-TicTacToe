@@ -23,6 +23,8 @@ export class MultiplayerService {
     initialGameDTO.row1 = initialGame.cellValue[1];
     initialGameDTO.row2 = initialGame.cellValue[2];
     initialGameDTO.currentPlayer = 'X';
+    initialGameDTO.oPlayer = null;
+    initialGameDTO.xPlayer = null;
 
     const gameData = JSON.parse(JSON.stringify(initialGameDTO));
 
@@ -42,19 +44,22 @@ export class MultiplayerService {
     }
   }
 
-  SaveGameStatus(gameId: string, game: Game): any {
-    const gameStatus = new GameDTO();
-    gameStatus.row0 = game.cellValue[0];
-    gameStatus.row1 = game.cellValue[1];
-    gameStatus.row2 = game.cellValue[2];
-    gameStatus.currentPlayer = game.currentPlayer;
+  SaveGameStatus(gameId: string, game: Game, gameDto: GameDTO): any {
+    gameDto.row0 = game.cellValue[0];
+    gameDto.row1 = game.cellValue[1];
+    gameDto.row2 = game.cellValue[2];
+    gameDto.currentPlayer = game.currentPlayer;
 
-    const gameData = JSON.parse(JSON.stringify(gameStatus));
+    const gameData = JSON.parse(JSON.stringify(gameDto));
     return this.db.doc('Game/' + gameId).update(gameData);
   }
 
   fetchGameStatus(gameId: string): Observable<GameDTO> {
     return this.db.doc<GameDTO>('Game/' + gameId).valueChanges();
+  }
+
+  getEmptyGames(): any {
+    return this.db.collection('Game', (ref) => ref.where('oPlayer', '==', null).limit(10)).get();
   }
 
   setArray(): Game {
@@ -80,11 +85,11 @@ export class MultiplayerService {
   }
 
   getGamesList(): any {
-    const games = this.db.collection<Game>('Game');
+    const games = this.db.collection<GameDTO>('Game');
     return games.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          const data = a.payload.doc.data() as Game;
+          const data = a.payload.doc.data() as GameDTO;
           const id = a.payload.doc.id;
           return { id, ...data };
         });
