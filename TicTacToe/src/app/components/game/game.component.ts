@@ -163,7 +163,6 @@ export class GameComponent implements OnInit {
     for (let i = 0; i < 3; i++) {
       sum += this.game.cellValue[i].filter(String).length;
     }
-
     if (sum === 9) {
       return true;
     } else {

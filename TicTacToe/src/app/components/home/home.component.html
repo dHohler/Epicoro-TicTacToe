@@ -7,11 +7,12 @@
     <div class="container">
       <div class="row">
         <div class="col-sm">
+
           <nb-accordion>
             <nb-accordion-item [disabled]="(emptyGames | async)?.length == 0" class="gameItem">
               <nb-accordion-item-header>Empty games</nb-accordion-item-header>
               <nb-accordion-item-body>
-                <div class="overflow-auto accordionItem">
+                <div class="accordionItem">
                   <div *ngFor="let game of emptyGames | async">
                     <div class="d-flex justify-content-between pointer" (click)="openGame(game.id)">
                       <div class="d-flex align-items-center justify-content-center">
@@ -28,13 +29,15 @@
               </nb-accordion-item-body>
             </nb-accordion-item>
           </nb-accordion>
+
         </div>
         <div class="col-sm">
+
           <nb-accordion>
             <nb-accordion-item [disabled]="(activeGames | async)?.length == 0" class="gameItem">
               <nb-accordion-item-header>Active games</nb-accordion-item-header>
               <nb-accordion-item-body>
-                <div class="overflow-auto accordionItem">
+                <div class="accordionItem">
                   <div *ngFor="let game of activeGames | async">
                     <div class="d-flex justify-content-between pointer" (click)="openGame(game.id)">
                       <div>
@@ -61,8 +64,10 @@
               </nb-accordion-item-body>
             </nb-accordion-item>
           </nb-accordion>
+
         </div>
         <div class="col-sm">
+
           <nb-accordion>
             <nb-accordion-item [disabled]="(finishedGames | async)?.length == 0" class="gameItem">
               <nb-accordion-item-header>Finished games</nb-accordion-item-header>
@@ -82,13 +87,17 @@
                       </div>
                       <div class="d-flex align-items-center justify-content-center mr-1">
                         <h6>
-                          <span *ngIf="game.winner.id === user.id" class="badge badge-success">
+                          <span *ngIf="game.winner?.id === user.id  && game.gameStatus === 2" class="badge badge-success">
                             You won!
                             <nb-icon icon="trophy" pack="fas"></nb-icon>
                           </span>
-                          <span *ngIf="game.winner.id !== user.id" class="badge badge-danger">
+                          <span *ngIf="game.winner?.id !== user.id && game.gameStatus === 2" class="badge badge-danger">
                             You lost!
                             <nb-icon icon="frown" pack="far"></nb-icon>
+                          </span>
+                          <span *ngIf="game.gameStatus === 3" class="badge badge-info">
+                            Draw!
+                            <nb-icon icon="grip-lines-vertical" pack="fas"></nb-icon>
                           </span>
                         </h6>
                       </div>
@@ -99,6 +108,7 @@
               </nb-accordion-item-body>
             </nb-accordion-item>
           </nb-accordion>
+
         </div>
       </div>
     </div>
