@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
   user: User;
   allGames: Observable<GameDTO[]>;
   emptyGames: Observable<GameDTO[]>;
+  myEmptyGames: Observable<GameDTO[]>;
   activeGames: Observable<GameDTO[]>;
   finishedGames: Observable<GameDTO[]>;
 
@@ -40,6 +41,12 @@ export class HomeComponent implements OnInit {
       )
     );
 
+    this.myEmptyGames = this.allGames.pipe(
+      map(games =>
+        games.filter( game => game.gameStatus === 0 && (game.xPlayer?.id === this.user.id || game.oPlayer?.id === this.user.id))
+      )
+    );
+
     this.activeGames = this.allGames.pipe(
       map(games =>
         games.filter( game => game.gameStatus === 1 && (game.xPlayer.id === this.user.id || game.oPlayer.id === this.user.id))
@@ -48,7 +55,7 @@ export class HomeComponent implements OnInit {
 
     this.finishedGames = this.allGames.pipe(
       map(games =>
-        games.filter(game => game.gameStatus === 2 || game.gameStatus === 3
+        games.filter(game => (game.gameStatus === 2 || game.gameStatus === 3)
           && (game.xPlayer.id === this.user.id || game.oPlayer.id === this.user.id))
       )
     );
@@ -56,9 +63,5 @@ export class HomeComponent implements OnInit {
 
   newGame(): void {
     this.multiPlayerService.initializeGame();
-  }
-
-  openGame(id: string): void {
-    this.router.navigate([`/game/${id}`]);
   }
 }

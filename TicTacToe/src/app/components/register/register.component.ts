@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
+    // TODO: check if user already exists
     this.userService.createUser(this.user);
     localStorage.setItem('User', JSON.stringify(this.user));
     this.router.navigate(['']);

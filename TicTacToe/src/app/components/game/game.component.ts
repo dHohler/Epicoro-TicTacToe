@@ -109,7 +109,6 @@ export class GameComponent implements OnInit {
     this.game.cellValue[1] = this.gameDto.row1;
     this.game.cellValue[2] = this.gameDto.row2;
     this.game.currentPlayer = this.gameDto.currentPlayer;
-
     this.CheckGameStatus();
     this.setCurrentPlayer();
   }
