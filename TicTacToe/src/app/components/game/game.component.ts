@@ -77,10 +77,10 @@ export class GameComponent implements OnInit {
     }
     if (!this.playerRole)
     {
-      if (this.gameDto.xPlayer.id === this.user.id) {
+      if (this.gameDto?.xPlayer?.id === this.user.id) {
         this.playerRole = 'X';
       }
-      else if (this.gameDto.oPlayer.id === this.user.id) {
+      else if (this.gameDto?.oPlayer?.id === this.user.id) {
         this.playerRole = 'O';
       }
     }
