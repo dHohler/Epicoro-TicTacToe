@@ -20,13 +20,17 @@ import { FormsModule } from '@angular/forms';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
+import { EmptyGamesComponent } from './components/home/empty-games/empty-games.component';
+import { ActiveGamesComponent } from './components/home/active-games/active-games.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    EmptyGamesComponent,
+    ActiveGamesComponent
   ],
   imports: [
     BrowserModule,

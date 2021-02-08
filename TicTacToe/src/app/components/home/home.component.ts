@@ -58,16 +58,6 @@ export class HomeComponent implements OnInit {
     this.multiPlayerService.initializeGame();
   }
 
-  waitingPlayer(game: GameDTO): string {
-    if (game.oPlayer)
-    {
-      return game.oPlayer.username;
-    }
-    else {
-      return game.xPlayer.username;
-    }
-  }
-
   openGame(id: string): void {
     this.router.navigate([`/game/${id}`]);
   }
