@@ -10,10 +10,10 @@ import {Router} from '@angular/router';
 })
 export class EmptyGamesComponent {
 
+  @Input() emptyGames: Observable<GameDTO[]>;
+
   constructor(
     private router: Router) {}
-
-  @Input() emptyGames: Observable<GameDTO[]>;
 
   waitingPlayer(game: GameDTO): string {
     if (game.oPlayer)
