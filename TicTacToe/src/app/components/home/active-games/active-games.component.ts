@@ -14,9 +14,7 @@ export class ActiveGamesComponent {
   @Input() activeGames: Observable<GameDTO[]>;
   @Input() user: User;
 
-  constructor(
-    private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   openGame(id: string): void {
     this.router.navigate([`/game/${id}`]);

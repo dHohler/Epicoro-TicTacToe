@@ -22,6 +22,7 @@ import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import { EmptyGamesComponent } from './components/home/empty-games/empty-games.component';
 import { ActiveGamesComponent } from './components/home/active-games/active-games.component';
+import { FinishedGamesComponent } from './components/home/finished-games/finished-games.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ActiveGamesComponent } from './components/home/active-games/active-game
     HomeComponent,
     RegisterComponent,
     EmptyGamesComponent,
-    ActiveGamesComponent
+    ActiveGamesComponent,
+    FinishedGamesComponent
   ],
   imports: [
     BrowserModule,
