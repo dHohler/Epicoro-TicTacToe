@@ -1,0 +1,31 @@
+<nb-accordion>
+  <nb-accordion-item [disabled]="(activeGames | async)?.length == 0" class="gameItem">
+    <nb-accordion-item-header>Active games</nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <div class="accordionItem">
+        <div *ngFor="let game of activeGames | async">
+          <div class="d-flex justify-content-between pointer" (click)="openGame(game.id)">
+            <div>
+              <div class="mt-2 mb-2">
+                <nb-icon icon="times" pack="fas"></nb-icon>
+                <span class="ml-3">{{game.xPlayer.username}}</span>
+              </div>
+              <div class="mt-2 mb-2">
+                <nb-icon icon="circle" pack="far"></nb-icon>
+                <span class="ml-3">{{game.oPlayer.username}}</span>
+              </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-center mr-1">
+              <h6>
+                <span *ngIf="(game.xPlayer.id === user.id && game.currentPlayer === 'X') || (game.oPlayer.id === user.id && game.currentPlayer === 'O')" class="badge badge-success">Your turn!</span>
+                <span *ngIf="(game.xPlayer.id !== user.id && game.currentPlayer === 'X')" class="badge badge-secondary">{{game.xPlayer.username}}'s turn!</span>
+                <span *ngIf="(game.oPlayer.id !== user.id && game.currentPlayer === 'O')" class="badge badge-secondary">{{game.oPlayer.username}}'s turn!</span>
+              </h6>
+            </div>
+          </div>
+          <hr/>
+        </div>
+      </div>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+</nb-accordion>

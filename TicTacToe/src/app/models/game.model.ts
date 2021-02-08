@@ -16,7 +16,7 @@ export class GameDTO {
   row2: string[];
   xPlayer: User;
   oPlayer: User;
-  winner: string;
+  winner: User;
   currentPlayer: string;
   gameFinished = false;
   gameStatus: GameStatus;

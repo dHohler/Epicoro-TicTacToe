@@ -45,22 +45,11 @@ export class GameComponent implements OnInit {
   }
 
   opponentUsername(): string {
-    if (!this.gameDto.xPlayer || !this.gameDto.oPlayer)
-    {
-      return 'Waiting for other player...';
-    }
-    else {
-      return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.xPlayer.username;
-    }
+    return (this.gameDto.xPlayer.id === this.user.id) ? this.gameDto.oPlayer.username : this.gameDto.xPlayer.username;
   }
 
   opponentRole(): string {
-    if (!this.gameDto.xPlayer || !this.gameDto.oPlayer) {
-      return '';
-    }
-    else {
       return (this.playerRole === 'X') ? ': O' : ': X';
-    }
   }
 
   initializePlayers(): void {
@@ -120,7 +109,6 @@ export class GameComponent implements OnInit {
     this.game.cellValue[1] = this.gameDto.row1;
     this.game.cellValue[2] = this.gameDto.row2;
     this.game.currentPlayer = this.gameDto.currentPlayer;
-
     this.CheckGameStatus();
     this.setCurrentPlayer();
   }
@@ -130,7 +118,7 @@ export class GameComponent implements OnInit {
     {
       this.gameFinished = true;
       this.gameDto.gameFinished = true;
-      this.gameDto.winner = this.game.currentPlayer;
+      this.gameDto.winner = this.game.currentPlayer === 'X' ? this.gameDto.oPlayer : this.gameDto.xPlayer;
       this.gameDto.gameStatus = 2;
       this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
     }
@@ -149,6 +137,7 @@ export class GameComponent implements OnInit {
         alert('The player ' + this.game.currentPlayer + ' has not yet played.\nPlease wait for your turn.');
       } else if (this.game.cellValue[row][col] === '') {
         this.game.cellValue[row][col] = this.game.currentPlayer;
+        this.setCurrentPlayer();
         this.multiPlayerService.SaveGameStatus(this.gameId, this.game, this.gameDto);
       }
     }
@@ -173,7 +162,6 @@ export class GameComponent implements OnInit {
     for (let i = 0; i < 3; i++) {
       sum += this.game.cellValue[i].filter(String).length;
     }
-
     if (sum === 9) {
       return true;
     } else {
